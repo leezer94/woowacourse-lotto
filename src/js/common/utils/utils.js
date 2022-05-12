@@ -1,3 +1,5 @@
+import { errorMessage } from '../template.js';
+
 export const disableChildNodes = (...target) => {
   target.forEach(({ childNodes }) => {
     childNodes.forEach((child) => {
@@ -22,6 +24,10 @@ export const ableChildElements = (target) => {
   [...target.children].map((childElement) => (childElement.disabled = false));
 };
 
+export const ableElement = (element) => {
+  element.disabled = false;
+};
+
 export const showElements = (...targets) => {
   targets.forEach((target) => (target.hidden = false));
 };
@@ -38,7 +44,11 @@ export const toggleClassList = (target, classList) => {
   [...target].map((container) => container.classList.toggle(classList));
 };
 
-export const getLottoNumbers = () => {
+export const insertErrorMessage = (target, position) => {
+  target.insertAdjacentHTML(position, errorMessage());
+};
+
+export const generateLottoNumbers = () => {
   const lottoNumbers = [];
 
   while (lottoNumbers.length < 6) {
@@ -56,4 +66,17 @@ export const getLottoNumbers = () => {
   }
 
   return lottoNumbers.sort((a, b) => a - b).join(', ');
+};
+
+export const checkForDuplicates = (array) => {
+  let valuesAlreadySeen = [];
+
+  for (let i = 0; i < array.length; i++) {
+    let value = array[i];
+    if (valuesAlreadySeen.indexOf(value) !== -1) {
+      return true;
+    }
+    valuesAlreadySeen.push(value);
+  }
+  return false;
 };
