@@ -1,5 +1,5 @@
 import { $, $$ } from '../common/utils/DOM.js';
-import { getLottoNumbers, hideElements, showElements, toggleClassList } from '../common/utils/utils.js';
+import { generateLottoNumbers, hideElements, showElements, toggleClassList } from '../common/utils/utils.js';
 import Component from '../Core/component.js';
 
 export default class LottoStatus extends Component {
@@ -23,7 +23,7 @@ export default class LottoStatus extends Component {
       <div class="lotto-status-box d-flex flex-wrap">
       ${[...new Array(purchasedAmount)]
         .map(() => {
-          return `<span class="mx-1 text-3xl">🎟️ <span class="lotto-numbers hidden">${getLottoNumbers()}</span></span>`;
+          return `<span class="mx-1 text-3xl">🎟️ <span class="lotto-numbers hidden">${generateLottoNumbers()}</span></span>`;
         })
         .join('')}
       </div>

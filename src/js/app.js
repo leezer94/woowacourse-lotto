@@ -2,6 +2,7 @@ import { PURCHASE } from './common/constants/constant.js';
 import { $ } from './common/utils/DOM.js';
 import Header from './Components/Header.js';
 import LottoStatus from './Components/LottoStatus.js';
+import LottoWinningNumberForm from './Components/lottoWinningNumberForm.js';
 import Component from './Core/component.js';
 
 export default class App extends Component {
@@ -14,6 +15,7 @@ export default class App extends Component {
       ...this.props,
       purchasedAmount: 0,
       lottoNumbers: [],
+      winningNumbers: [],
     });
   }
 
@@ -23,7 +25,7 @@ export default class App extends Component {
         <div class="w-100">
           <section class="lotto-purchase-section"></section>
           <section class="lotto-status-section mt-9" hidden></section>
-          <form class="lotto-result-form mt-9"></form>
+          <form class="lotto-result-form mt-9" hidden></form>
           <div class="modal"></div>
         </div>
       </div>
@@ -31,24 +33,43 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    const { handlePurchasedAmount } = this;
+    const { handlePurchasedAmount, handleLottoNumbers } = this;
 
     new Header($('.lotto-purchase-section'), {
       ...this.state,
       updatePurchasedAmount: handlePurchasedAmount.bind(this),
+      updateLottoNumbers: handleLottoNumbers.bind(this),
     });
 
-    new LottoStatus($('.lotto-status-section'), { ...this.state });
+    new LottoStatus($('.lotto-status-section'), {
+      ...this.state,
+      // updateLottoNumbers: handleLottoNumbers.bind(this),
+    });
+
+    new LottoWinningNumberForm($('.lotto-result-form'), {
+      ...this.state,
+    });
   }
 
-  handlePurchasedAmount(input) {
+  handlePurchasedAmount(inputNumber) {
     let { purchasedAmount } = this.state;
 
-    purchasedAmount = input.value / PURCHASE.THRESHOLD_NUMBER;
+    purchasedAmount = inputNumber.value / PURCHASE.THRESHOLD_NUMBER;
 
     this.setState({
       ...this.state,
       purchasedAmount,
+    });
+  }
+
+  handleLottoNumbers(numbers) {
+    let { lottoNumbers } = this.state;
+
+    lottoNumbers = numbers;
+
+    this.setState({
+      ...this.state,
+      lottoNumbers,
     });
   }
 }

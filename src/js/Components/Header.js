@@ -1,4 +1,4 @@
-import { $ } from '../common/utils/DOM.js';
+import { $, $$ } from '../common/utils/DOM.js';
 import { disableChildElements, disableChildNodes, showElements } from '../common/utils/utils.js';
 import { alertErrorMessage, isValidPurchaseInputValue } from '../common/utils/validators.js';
 import Component from '../Core/component.js';
@@ -31,8 +31,11 @@ export default class Header extends Component {
 
       if (alertErrorMessage(isValidPurchaseInputValue($('#lotto-purchase-input')))) {
         this.updateAmount($('#lotto-purchase-input'));
+        this.updateLottos();
+
         disableChildElements($('.lotto-purchase-container'));
-        showElements($('.lotto-status-section'));
+
+        showElements($('.lotto-status-section'), $('.lotto-result-form'));
       }
     });
   }
@@ -41,5 +44,21 @@ export default class Header extends Component {
     const { updatePurchasedAmount } = this.props;
 
     updatePurchasedAmount(input);
+  }
+
+  updateLottos() {
+    const { updateLottoNumbers } = this.props;
+    const lottoNumbers = $$('.lotto-numbers');
+    const numberArray = [];
+
+    [...lottoNumbers].map((lotto) => {
+      let numbers = lotto.textContent.split(', ');
+
+      numbers = [...numbers].map((number) => Number(number));
+
+      numberArray.push(numbers);
+    });
+
+    updateLottoNumbers(numberArray);
   }
 }
