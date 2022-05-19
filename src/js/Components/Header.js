@@ -1,5 +1,5 @@
 import { $, $$ } from '../common/utils/DOM.js';
-import { disableChildElements, disableChildNodes, showElements } from '../common/utils/utils.js';
+import { disableChildElements, showElements } from '../common/utils/utils.js';
 import { alertErrorMessage, isValidPurchaseInputValue } from '../common/utils/validators.js';
 import Component from '../Core/component.js';
 

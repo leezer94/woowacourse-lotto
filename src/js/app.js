@@ -3,6 +3,7 @@ import { $ } from './common/utils/DOM.js';
 import Header from './Components/Header.js';
 import LottoStatus from './Components/LottoStatus.js';
 import LottoWinningNumberForm from './Components/lottoWinningNumberForm.js';
+import Modal from './Components/Modal.js';
 import Component from './Core/component.js';
 
 export default class App extends Component {
@@ -12,7 +13,6 @@ export default class App extends Component {
 
   async initialState() {
     this.setState({
-      ...this.props,
       purchasedAmount: 0,
       lottoNumbers: [],
       winningNumbers: [],
@@ -33,21 +33,29 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    const { handlePurchasedAmount, handleLottoNumbers } = this;
+    // bind(this) 로 this 를 넘겨줌
+
+    const { handlePurchasedAmount, handleLottoNumbers, handleResultButton, handleStates } = this;
 
     new Header($('.lotto-purchase-section'), {
       ...this.state,
       updatePurchasedAmount: handlePurchasedAmount.bind(this),
-      updateLottoNumbers: handleLottoNumbers.bind(this),
+      // updateLottoNumbers: handleLottoNumbers.bind(this),
     });
 
     new LottoStatus($('.lotto-status-section'), {
       ...this.state,
-      // updateLottoNumbers: handleLottoNumbers.bind(this),
+      updateLottoNumbers: handleLottoNumbers.bind(this),
     });
 
     new LottoWinningNumberForm($('.lotto-result-form'), {
       ...this.state,
+      updateWinningNumbers: handleResultButton.bind(this),
+    });
+
+    new Modal($('.modal'), {
+      ...this.state,
+      resetState: handleStates.bind(this),
     });
   }
 
@@ -70,6 +78,30 @@ export default class App extends Component {
     this.setState({
       ...this.state,
       lottoNumbers,
+    });
+  }
+
+  handleResultButton(numbers) {
+    let { winningNumbers } = this.state;
+
+    winningNumbers = numbers;
+
+    this.setState({
+      ...this.state,
+      winningNumbers,
+    });
+  }
+
+  handleStates() {
+    let { purchasedAmount, lottoNumbers, winningNumbers } = this.state;
+    purchasedAmount = 0;
+    lottoNumbers = [];
+    winningNumbers = [];
+
+    this.setState({
+      purchasedAmount,
+      lottoNumbers,
+      winningNumbers,
     });
   }
 }

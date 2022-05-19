@@ -1,3 +1,7 @@
+export const errorMessage = () => {
+  return `<p id="error-message"> 1 ~ 45 사이의 숫자만 입력이 가능합니다.</p>`;
+};
+
 const baseTemplate = () => {
   return `
       <div class="d-flex justify-center mt-5">

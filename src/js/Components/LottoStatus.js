@@ -34,5 +34,23 @@ export default class LottoStatus extends Component {
     $('.lotto-numbers-toggle-button').addEventListener('change', () => {
       toggleClassList($$('.lotto-numbers'), 'hidden');
     });
+
+    this.updateLottos();
+  }
+
+  updateLottos() {
+    const { updateLottoNumbers } = this.props;
+    const lottoNumbers = $$('.lotto-numbers');
+    const numberArray = [];
+
+    [...lottoNumbers].map((lotto) => {
+      let numbers = lotto.textContent.split(', ');
+
+      numbers = [...numbers].map((number) => Number(number));
+
+      numberArray.push(numbers);
+    });
+
+    updateLottoNumbers(numberArray);
   }
 }

@@ -1,6 +1,5 @@
-import { errorMessage } from '../common/template.js';
 import { $, $$ } from '../common/utils/DOM.js';
-import { ableElement, checkForDuplicates, hideElements, insertErrorMessage, showElements } from '../common/utils/utils.js';
+import { ableElement, checkForDuplicates, hideElements, showElements, setDisplay } from '../common/utils/utils.js';
 import Component from '../Core/component.js';
 
 export default class LottoWinningNumberForm extends Component {
@@ -41,12 +40,16 @@ export default class LottoWinningNumberForm extends Component {
 
     [...$$('.winning-number')].map((input) => {
       input.addEventListener('change', () => {
-        this.updateWinningNumbers();
+        this.getWinningNumbers();
       });
     });
 
     $('#bonus-number').addEventListener('change', () => {
       this.activateResultBtn();
+    });
+
+    $('.open-result-modal-button').addEventListener('click', () => {
+      this.onClickResultButton();
     });
   }
 
@@ -66,7 +69,7 @@ export default class LottoWinningNumberForm extends Component {
   }
 
   activateResultBtn() {
-    const winningNumberArray = this.updateWinningNumbers();
+    const winningNumberArray = this.getWinningNumbers();
     const resultButtonElement = $('.open-result-modal-button');
 
     if (checkForDuplicates(winningNumberArray) !== false) {
@@ -77,19 +80,19 @@ export default class LottoWinningNumberForm extends Component {
     }
   }
 
-  updateWinningNumbers() {
+  getWinningNumbers() {
     const winningNumbers = [];
 
     [...$$('.winning-number')].map((input) => winningNumbers.push(Number(input.value)));
 
     return winningNumbers;
   }
+
+  onClickResultButton() {
+    const { updateWinningNumbers } = this.props;
+
+    updateWinningNumbers(this.getWinningNumbers());
+    setDisplay($('.modal'), 'flex');
+    showElements($('.lotto-status-section'), $('.lotto-result-form'));
+  }
 }
-
-// TODOS
-
-// SAVE WINNING NUMBERS
-// SAVE AUTOMATICALLY GENERATED LOTTO NUMBERS
-// CHECK IF WINNING NUMBERS CONTAIN THE NUMBERS OUTSIDE 1 ~ 45 x
-// CHECK IF DUPLICATED NUMBERS ARE CONTAINED IN THE ARRAY
-// DIVIED FUNCTIONS AS IT CAN DO SINGLE JOB

@@ -1,8 +1,9 @@
 .modal {
-  opacity: 0;
-  visibility: hidden;
-  display: flex;
-  position: fixed;
+  width: 180vh;
+  height: 100vh;
+  opacity: 1;
+  display: none;
+  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
@@ -18,13 +19,15 @@
 }
 
 .modal-inner {
+  top: 10px;
   transition: top 0.25s ease;
   max-width: 350px;
   margin: auto;
   overflow: auto;
   background: #fff;
-  border-radius: 5px;
+  border-radius: 10px;
   position: relative;
+  border: 2px black solid;
 }
 
 .modal-close {

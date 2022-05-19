@@ -28,6 +28,10 @@ export const ableElement = (element) => {
   element.disabled = false;
 };
 
+export const setDisplay = (target, property) => {
+  target.style.display = property;
+};
+
 export const showElements = (...targets) => {
   targets.forEach((target) => (target.hidden = false));
 };
