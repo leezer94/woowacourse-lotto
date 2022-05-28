@@ -9,13 +9,16 @@ import Component from './Core/component.js';
 export default class App extends Component {
   constructor(...rest) {
     super(...rest);
+    this.initialState();
   }
 
   async initialState() {
     this.setState({
       purchasedAmount: 0,
-      lottoNumbers: [],
-      winningNumbers: [],
+      lottos: [],
+      lottoWinningNumbers: [],
+      isModalPopedUp: false,
+      store: { 6: 0, 5: 0, 5.5: 0, 4: 0, 3: 0 },
     });
   }
 
@@ -35,73 +38,80 @@ export default class App extends Component {
   componentDidMount() {
     // bind(this) 로 this 를 넘겨줌
 
-    const { handlePurchasedAmount, handleLottoNumbers, handleResultButton, handleStates } = this;
+    // Rendering needs to be done when it is actually needed
+    // As well as only limited(essential) states are updating as needed
+    // reRendering is happening when elements are called on different ( not appropriate ) component ??
+
+    const { handlePurchasedAmount, handleLottos, handleResultButton, handleStates, handleModalState, handleStore } = this;
+
+    // In the header component lotto and purchasedAmount states need to be updated on click submit event
 
     new Header($('.lotto-purchase-section'), {
       ...this.state,
       updatePurchasedAmount: handlePurchasedAmount.bind(this),
-      // updateLottoNumbers: handleLottoNumbers.bind(this),
+      updateLottos: handleLottos.bind(this),
     });
 
     new LottoStatus($('.lotto-status-section'), {
       ...this.state,
-      updateLottoNumbers: handleLottoNumbers.bind(this),
     });
 
     new LottoWinningNumberForm($('.lotto-result-form'), {
       ...this.state,
       updateWinningNumbers: handleResultButton.bind(this),
+      updateModalStatus: handleModalState.bind(this),
     });
 
     new Modal($('.modal'), {
       ...this.state,
+      updateModalStatus: handleModalState.bind(this),
+      updateStore: handleStore.bind(this),
       resetState: handleStates.bind(this),
     });
   }
 
   handlePurchasedAmount(inputNumber) {
-    let { purchasedAmount } = this.state;
-
-    purchasedAmount = inputNumber.value / PURCHASE.THRESHOLD_NUMBER;
-
     this.setState({
       ...this.state,
-      purchasedAmount,
+      purchasedAmount: inputNumber.value / PURCHASE.THRESHOLD_NUMBER,
     });
   }
 
-  handleLottoNumbers(numbers) {
-    let { lottoNumbers } = this.state;
-
-    lottoNumbers = numbers;
-
+  handleLottos(numbers) {
     this.setState({
       ...this.state,
-      lottoNumbers,
+      lottos: numbers,
     });
   }
 
   handleResultButton(numbers) {
-    let { winningNumbers } = this.state;
-
-    winningNumbers = numbers;
-
     this.setState({
       ...this.state,
-      winningNumbers,
+      lottoWinningNumbers: numbers,
+    });
+  }
+
+  handleStore(newStore) {
+    this.setState({
+      ...this.state,
+      store: newStore,
+    });
+  }
+
+  handleModalState(boolean) {
+    this.setState({
+      ...this.state,
+      isModalPopedUp: boolean,
     });
   }
 
   handleStates() {
-    let { purchasedAmount, lottoNumbers, winningNumbers } = this.state;
-    purchasedAmount = 0;
-    lottoNumbers = [];
-    winningNumbers = [];
-
     this.setState({
-      purchasedAmount,
-      lottoNumbers,
-      winningNumbers,
+      purchasedAmount: 0,
+      lottos: [],
+      lottoWinningNumbers: [],
+      isModalPopedUp: false,
+      store: { 6: 0, 5: 0, 5.5: 0, 4: 0, 3: 0 },
     });
   }
 }

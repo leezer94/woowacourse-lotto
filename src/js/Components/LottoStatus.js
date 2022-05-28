@@ -1,5 +1,5 @@
 import { $, $$ } from '../common/utils/DOM.js';
-import { generateLottoNumbers, hideElements, showElements, toggleClassList } from '../common/utils/utils.js';
+import { generateLottoNumbers, toggleClassList } from '../common/utils/utils.js';
 import Component from '../Core/component.js';
 
 export default class LottoStatus extends Component {
@@ -34,23 +34,5 @@ export default class LottoStatus extends Component {
     $('.lotto-numbers-toggle-button').addEventListener('change', () => {
       toggleClassList($$('.lotto-numbers'), 'hidden');
     });
-
-    this.updateLottos();
-  }
-
-  updateLottos() {
-    const { updateLottoNumbers } = this.props;
-    const lottoNumbers = $$('.lotto-numbers');
-    const numberArray = [];
-
-    [...lottoNumbers].map((lotto) => {
-      let numbers = lotto.textContent.split(', ');
-
-      numbers = [...numbers].map((number) => Number(number));
-
-      numberArray.push(numbers);
-    });
-
-    updateLottoNumbers(numberArray);
   }
 }

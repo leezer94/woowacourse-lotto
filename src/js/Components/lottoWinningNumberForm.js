@@ -50,6 +50,9 @@ export default class LottoWinningNumberForm extends Component {
 
     $('.open-result-modal-button').addEventListener('click', () => {
       this.onClickResultButton();
+
+      showElements($('.lotto-status-section'), $('.lotto-result-form'));
+      setDisplay($('.modal'), 'flex');
     });
   }
 
@@ -83,16 +86,23 @@ export default class LottoWinningNumberForm extends Component {
   getWinningNumbers() {
     const winningNumbers = [];
 
-    [...$$('.winning-number')].map((input) => winningNumbers.push(Number(input.value)));
+    [...$$('.winning-number')].map((input) => {
+      winningNumbers.push(Number(input.value));
+    });
 
     return winningNumbers;
   }
 
   onClickResultButton() {
-    const { updateWinningNumbers } = this.props;
+    const { updateWinningNumbers, updateModalStatus } = this.props;
 
     updateWinningNumbers(this.getWinningNumbers());
-    setDisplay($('.modal'), 'flex');
-    showElements($('.lotto-status-section'), $('.lotto-result-form'));
+    updateModalStatus(true);
   }
 }
+
+// TODOS
+
+// CANT GET WINNINGLOTTONUMBERS IN THIS COMPONENT
+
+// RECHECK VALIDATION FOR WINNING NUBERS INPUT

@@ -1,5 +1,5 @@
 import { $ } from '../common/utils/DOM.js';
-import { hideElements, setDisplay } from '../common/utils/utils.js';
+import { hideElements, showElements, setDisplay } from '../common/utils/utils.js';
 import Component from '../Core/component.js';
 
 export default class Modal extends Component {
@@ -30,27 +30,27 @@ export default class Modal extends Component {
                 <tr class="text-center">
                   <td class="p-3">3개</td>
                   <td class="p-3">5,000</td>
-                  <td class="p-3">n개</td>
+                  <td class="p-3">${this.props.store[3]}개</td>
                 </tr>
                 <tr class="text-center">
                   <td class="p-3">4개</td>
                   <td class="p-3">50,000</td>
-                  <td class="p-3">n개</td>
+                  <td class="p-3">${this.props.store[4]}개</td>
                 </tr>
                 <tr class="text-center">
                   <td class="p-3">5개</td>
                   <td class="p-3">1,500,000</td>
-                  <td class="p-3">n개</td>
+                  <td class="p-3">${this.props.store[5]}개</td>
                 </tr>
                 <tr class="text-center">
                   <td class="p-3">5개 + 보너스볼</td>
                   <td class="p-3">30,000,000</td>
-                  <td class="p-3">n개</td>
+                  <td class="p-3">${this.props.store[5.5]}개</td>
                 </tr>
                 <tr class="text-center">
                   <td class="p-3">6개</td>
                   <td class="p-3">2,000,000,000</td>
-                  <td class="p-3">n개</td>
+                  <td class="p-3">${this.props.store[6]}개</td>
                 </tr>
               </tbody>
             </table>
@@ -65,11 +65,21 @@ export default class Modal extends Component {
   }
 
   componentDidMount() {
+    const { updateModalStatus, lottoWinningNumbers, isModalPopedUp } = this.props;
+
+    $('.open-result-modal-button').addEventListener('click', () => {
+      if (isModalPopedUp) {
+        this.compareLottoNumbers(lottoWinningNumbers);
+      }
+    });
+
     $('.reset-btn').addEventListener('click', () => {
+      updateModalStatus(false);
       this.onClickResetBtn();
     });
 
     $('.close-x').addEventListener('click', () => {
+      updateModalStatus(false);
       this.onClickCloseBtn();
     });
   }
@@ -84,15 +94,45 @@ export default class Modal extends Component {
 
   onClickCloseBtn() {
     setDisplay($('.modal'), 'none');
+    showElements($('.lotto-status-section'), $('.lotto-result-form'));
+  }
+
+  compareLottoNumbers(lottoWinningNumbers) {
+    const { lottos, updateStore } = this.props;
+
+    const winning_numbers = lottoWinningNumbers.slice(0, 6);
+    const bonus_number = lottoWinningNumbers.slice(6, 7);
+
+    const store = { 6: 0, 5: 0, 5.5: 0, 4: 0, 3: 0 };
+
+    // count 5 와 5.5 에 대한 검증
+
+    [...lottos].map((lotto) => {
+      let count = 0;
+
+      lotto.map((number) => {
+        if (winning_numbers.includes(number)) {
+          count++;
+        }
+      });
+
+      console.log(count);
+
+      if (count >= 1) store[count] += 1;
+
+      if (count === 5 && winning_numbers.includes(bonus_number)) {
+        store[5.5] += 1;
+      }
+    });
+
+    updateStore(store);
   }
 
   // TODOS
 
-  // SAVE WINNING NUMBERS
-  // SAVE AUTOMATICALLY GENERATED LOTTO NUMBERS
-  // CHECK IF WINNING NUMBERS CONTAIN THE NUMBERS OUTSIDE 1 ~ 45 x
-  // CHECK IF DUPLICATED NUMBERS ARE CONTAINED IN THE ARRAY
-  // DIVIED FUNCTIONS AS IT CAN DO SINGLE JOB
-  // MODAL POPUP OUTLINE AND STUFFS.
-  // RECHECK VALIDATION FOR LOTTO NUMBERS
+  // ALGORITHM FOR COMPARING LOTTO NUMBERS
+
+  // [[1,2,4,5,6,7], [4,7,2,11,44,33],[44,22,33,12,43,11]]
+
+  // [1,2,3,4,5,6,7]  winning numbers + bonus number
 }

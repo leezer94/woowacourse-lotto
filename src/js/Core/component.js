@@ -23,6 +23,7 @@ export default class Component {
   // this updates status
   setState(newState) {
     // 컴포넌트의 상태를 변경
+
     this.state = newState;
 
     this.render();

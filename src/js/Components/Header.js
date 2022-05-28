@@ -34,7 +34,6 @@ export default class Header extends Component {
         this.updateLottos();
 
         disableChildElements($('.lotto-purchase-container'));
-
         showElements($('.lotto-status-section'), $('.lotto-result-form'));
       }
     });
@@ -47,9 +46,11 @@ export default class Header extends Component {
   }
 
   updateLottos() {
-    const { updateLottoNumbers } = this.props;
-    const lottoNumbers = $$('.lotto-numbers');
+    const { updateLottos } = this.props;
+
     const numberArray = [];
+
+    const lottoNumbers = $$('.lotto-numbers');
 
     [...lottoNumbers].map((lotto) => {
       let numbers = lotto.textContent.split(', ');
@@ -59,6 +60,6 @@ export default class Header extends Component {
       numberArray.push(numbers);
     });
 
-    updateLottoNumbers(numberArray);
+    updateLottos(numberArray);
   }
 }
