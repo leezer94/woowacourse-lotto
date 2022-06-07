@@ -4,9 +4,9 @@ const debounceFrame = (callback) => {
   let currentCallback = -1;
 
   return () => {
-    cancelAnimationFrame(currentCallback);
+    cancelAnimationFrame(currentCallback); // 현재 등록된 callback이 있을 경우 취소한다.
 
-    currentCallback = requestAnimationFrame(callback);
+    currentCallback = requestAnimationFrame(callback); // 1프레임 뒤에 실행되도록 한다.
   };
 };
 
